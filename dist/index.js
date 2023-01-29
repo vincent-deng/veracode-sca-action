@@ -9682,7 +9682,7 @@ async function run() {
   // }
 
   const process1 = new Promise((resolve, reject) => {
-    const child = spawn('sh', ['-c', commands[0]]);
+    const child =spawn('sh', ['-c', commands[0]]);
     let output = '';
     
     child.stdout.on('data', (data) => {
@@ -9690,7 +9690,6 @@ async function run() {
     });
     
     child.stderr.on('data', (data) => {
-      failJob = true;
       reject(data);
     });
     
@@ -9700,7 +9699,7 @@ async function run() {
   });
   
   const process2 = new Promise((resolve, reject) => {
-    const child = spawn('sh', ['-c', commands[1]]);
+    const child =spawn('sh', ['-c', commands[1]]);
     let output = '';
     
     child.stdout.on('data', (data) => {
@@ -9708,7 +9707,6 @@ async function run() {
     });
     
     child.stderr.on('data', (data) => {
-      failJob = true;
       reject(data);
     });
     
@@ -9717,20 +9715,26 @@ async function run() {
     });
   });
   
-  await Promise.all([process1, process2]);
+  Promise.all([process1, process2])
+    .then((results) => {
+      console.log(results);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
     
-  const artifactClient = artifact.create()
-  const artifactName = 'Veracode SCA Results';
-  const files = [
-    'srcclr-output.txt', 
-    'srcclr-output.json'
-  ];
-  const rootDirectory = process.cwd()
-  const options = { continueOnError: true }
-  await artifactClient.uploadArtifact(artifactName, files, rootDirectory, options);
+  // const artifactClient = artifact.create()
+  // const artifactName = 'Veracode SCA Results';
+  // const files = [
+  //   'srcclr-output.txt', 
+  //   'srcclr-output.json'
+  // ];
+  // const rootDirectory = process.cwd()
+  // const options = { continueOnError: true }
+  // await artifactClient.uploadArtifact(artifactName, files, rootDirectory, options);
 
-  const output = execSync('cat srcclr-output.txt').toString();
-  if (failJob) setFailed(output);
+  // const output = execSync('cat srcclr-output.txt').toString();
+  // if (failJob) setFailed(output);
 }
 
 // async function spawnCommand(command) {
