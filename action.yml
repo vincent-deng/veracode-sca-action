@@ -1,0 +1,12 @@
+name: 'Veracode Software Composition Analysis'
+description: 'Action to run Veracode Software Composition Analysis'
+branding:
+  icon: 'check-circle'
+  color: 'white'
+
+runs:
+  using: "composite"
+  steps: 
+    - run: |
+        curl -sSL https://download.sourceclear.com/ci.sh | sh
+      shell: bash
