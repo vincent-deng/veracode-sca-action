@@ -5,6 +5,4 @@ async function run() {
   console.log(output);
 }
 
-module.exports = {
-  run,
-}
+run();
