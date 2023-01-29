@@ -9658,23 +9658,32 @@ module.exports = require("zlib");
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-const { execSync } = __nccwpck_require__(2081);
+// const { execSync } = require('child_process');
+const { spawn } = __nccwpck_require__(2081);
 const { setFailed } = __nccwpck_require__(2186);
 const artifact = __nccwpck_require__(2605);
 
 async function run() {
   let failJob = false;
-  let output;
-  try {
-    output = execSync(`curl -sSL https://download.sourceclear.com/ci.sh | sh -s -- scan --json='srcclr-output.json'`)
-  } catch(error) {
-    failJob = true;
-  }
+  const commands = [
+    `curl -sSL https://download.sourceclear.com/ci.sh | sh -s -- scan > srcclr-out.txt`,
+    `curl -sSL https://download.sourceclear.com/ci.sh | sh -s -- scan --json='srcclr-output.json'`
+  ]
+
+  let executions = commands.map(command => spawnCommand(command));
+
+  await Promise.all(executions);
+
+  // try {
+  //   output = execSync(`curl -sSL https://download.sourceclear.com/ci.sh | sh -s -- scan --json='srcclr-output.json'`)
+  // } catch(error) {
+  //   failJob = true;
+  // }
 
   const artifactClient = artifact.create()
   const artifactName = 'Veracode SCA Results';
   const files = [
-    // 'srcclr-output.txt', 
+    'srcclr-output.txt', 
     'srcclr-output.json'
   ];
   const rootDirectory = process.cwd()
@@ -9682,6 +9691,10 @@ async function run() {
   await artifactClient.uploadArtifact(artifactName, files, rootDirectory, options);
 
   if (failJob) setFailed(output)
+}
+
+async function spawnCommand(command) {
+  spawn('sh', ['-c', command]);
 }
 
 run();
