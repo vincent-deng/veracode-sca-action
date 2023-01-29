@@ -5,8 +5,10 @@ branding:
   color: 'white'
 
 runs:
-  using: "composite"
-  steps: 
-    - run: |
-        curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan > srcclr-output.txt
-      shell: bash
+  using: 'node16'
+  main: 'index.js'
+  # using: "composite"
+  # steps: 
+  #   - run: |
+  #       curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan > srcclr-output.txt
+  #     shell: bash
