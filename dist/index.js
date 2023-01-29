@@ -9665,14 +9665,14 @@ const artifact = __nccwpck_require__(2605);
 async function run() {
   let failJob = false;
   try {
-    execSync('curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan > srcclr-output.txt')
+    execSync(`curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan --json='srcclr-output.json' > srcclr-output.txt`)
   } catch(error) {
     failJob = true;
   }
 
   const artifactClient = artifact.create()
   const artifactName = 'Veracode SCA Results';
-  const files = ['srcclr-output.txt'];
+  const files = ['srcclr-output.txt', 'srcclr-output.json'];
   const rootDirectory = process.cwd()
   const options = { continueOnError: true }
   await artifactClient.uploadArtifact(artifactName, files, rootDirectory, options);
