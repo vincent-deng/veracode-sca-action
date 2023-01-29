@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/vincent-deng/veracode-sca-action#readme",
   "dependencies": {
+    "@actions/artifact": "^1.1.1",
     "@actions/core": "^1.10.0"
   },
   "devDependencies": {

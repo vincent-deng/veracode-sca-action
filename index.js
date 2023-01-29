@@ -1,5 +1,6 @@
 const { execSync } = require('child_process');
 const { setFailed } = require('@actions/core');
+const artifact = require('@actions/artifact');
 
 async function run() {
   let failJob = false;
@@ -9,9 +10,15 @@ async function run() {
     failJob = true;
   }
 
-  const output = execSync('cat srcclr-output.txt').toString();
-  console.log(output);
+  const artifactClient = artifact.create()
+  const artifactName = 'Veracode SCA Results';
+  const files = ['srcclr-output.txt'];
+  const rootDirectory = process.cwd()
+  const options = { continueOnError: true }
+  await artifactClient.uploadArtifact(artifactName, files, rootDirectory, options);
 
+
+  const output = execSync('cat srcclr-output.txt').toString();
   if (failJob) setFailed(output)
 }
 
