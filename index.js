@@ -1,5 +1,5 @@
-const { execSync } = require('child_process');
-// const { spawn } = require('child_process');
+// const { execSync } = require('child_process');
+const { spawn } = require('child_process');
 const { setFailed } = require('@actions/core');
 const artifact = require('@actions/artifact');
 
@@ -13,14 +13,52 @@ async function run() {
   // let executions = commands.map(command => spawnCommand(command));
   // await Promise.all(executions);
 
-  for(idx in commands){
-    try {
-      execSync(commands[idx]);
-    } catch (error) {
-      failJob = true;
-    }
-  }
+  // for(idx in commands){
+  //   try {
+  //     execSync(commands[idx]);
+  //   } catch (error) {
+  //     failJob = true;
+  //   }
+  // }
 
+  const process1 = new Promise((resolve, reject) => {
+    const child = spawn('sh', ['-c', command[0]]);
+    let output = '';
+    
+    child.stdout.on('data', (data) => {
+      output += data;
+    });
+    
+    child.stderr.on('data', (data) => {
+      failJob = true;
+      reject(data);
+    });
+    
+    child.on('close', (code) => {
+      resolve({ code, output });
+    });
+  });
+  
+  const process2 = new Promise((resolve, reject) => {
+    const child = spawn('sh', ['-c', command[1]]);
+    let output = '';
+    
+    child.stdout.on('data', (data) => {
+      output += data;
+    });
+    
+    child.stderr.on('data', (data) => {
+      failJob = true;
+      reject(data);
+    });
+    
+    child.on('close', (code) => {
+      resolve({ code, output });
+    });
+  });
+  
+  await Promise.all([process1, process2]);
+    
   const artifactClient = artifact.create()
   const artifactName = 'Veracode SCA Results';
   const files = [
