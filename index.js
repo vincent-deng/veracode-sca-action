@@ -22,7 +22,7 @@ async function run() {
   // }
 
   const process1 = new Promise((resolve, reject) => {
-    const child = spawn('sh', ['-c', command[0]]);
+    const child = spawn('sh', ['-c', commands[0]]);
     let output = '';
     
     child.stdout.on('data', (data) => {
@@ -40,7 +40,7 @@ async function run() {
   });
   
   const process2 = new Promise((resolve, reject) => {
-    const child = spawn('sh', ['-c', command[1]]);
+    const child = spawn('sh', ['-c', commands[1]]);
     let output = '';
     
     child.stdout.on('data', (data) => {
