@@ -6,8 +6,8 @@ const artifact = require('@actions/artifact');
 async function run() {
   let failJob = false;
   const commands = [
-    `curl -sSL https://download.sourceclear.com/ci.sh | sh -s -- scan > srcclr-out.txt`,
-    `curl -sSL https://download.sourceclear.com/ci.sh | sh -s -- scan --json='srcclr-output.json'`
+    `curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan > srcclr-out.txt`,
+    `curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan --json='srcclr-output.json'`
   ]
 
   // let executions = commands.map(command => spawnCommand(command));
