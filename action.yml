@@ -8,5 +8,5 @@ runs:
   using: "composite"
   steps: 
     - run: |
-        curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan --json="scaResults.json"
+        curl -sSL https://download.sourceclear.com/ci.sh | sh -s scan > srcclr-output.txt
       shell: bash
