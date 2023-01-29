@@ -12,7 +12,7 @@ async function run() {
   const output = execSync('cat srcclr-output.txt').toString();
   console.log(output);
 
-  if (failJob) core.setFailed(output)
+  if (failJob) setFailed(output)
 }
 
 run();
