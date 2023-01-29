@@ -1,4 +1,4 @@
-// const { execSync } = require('child_process');
+const { execSync } = require('child_process');
 const { spawn } = require('child_process');
 const { setFailed } = require('@actions/core');
 const artifact = require('@actions/artifact');
@@ -21,8 +21,28 @@ async function run() {
   //   }
   // }
 
+  await spawnCommand(commands);
+  
+    
+  // const artifactClient = artifact.create()
+  // const artifactName = 'Veracode SCA Results';
+  // const files = [
+  //   'srcclr-output.txt', 
+  //   'srcclr-output.json'
+  // ];
+  // const rootDirectory = process.cwd()
+  // const options = { continueOnError: true }
+  // await artifactClient.uploadArtifact(artifactName, files, rootDirectory, options);
+
+  const output = execSync('cat srcclr-output.txt').toString();
+  // if (failJob) 
+  setFailed(output);
+}
+
+async function spawnCommand(commands) {
   const process1 = new Promise((resolve, reject) => {
     const child =spawn('sh', ['-c', commands[0]]);
+    console.log('command 1 started');
     let output = '';
     
     child.stdout.on('data', (data) => {
@@ -40,6 +60,7 @@ async function run() {
   
   const process2 = new Promise((resolve, reject) => {
     const child =spawn('sh', ['-c', commands[1]]);
+    console.log('command 2 started');
     let output = '';
     
     child.stdout.on('data', (data) => {
@@ -62,23 +83,6 @@ async function run() {
     .catch((error) => {
       console.error(error);
     });
-    
-  // const artifactClient = artifact.create()
-  // const artifactName = 'Veracode SCA Results';
-  // const files = [
-  //   'srcclr-output.txt', 
-  //   'srcclr-output.json'
-  // ];
-  // const rootDirectory = process.cwd()
-  // const options = { continueOnError: true }
-  // await artifactClient.uploadArtifact(artifactName, files, rootDirectory, options);
-
-  // const output = execSync('cat srcclr-output.txt').toString();
-  // if (failJob) setFailed(output);
 }
-
-// async function spawnCommand(command) {
-//   spawn('sh', ['-c', command]);
-// }
 
 run();
