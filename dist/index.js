@@ -9659,7 +9659,6 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const { execSync } = __nccwpck_require__(2081);
-// const { spawn } = require('child_process');
 const { setFailed } = __nccwpck_require__(2186);
 const artifact = __nccwpck_require__(2605);
 

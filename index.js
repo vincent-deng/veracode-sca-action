@@ -1,5 +1,4 @@
 const { execSync } = require('child_process');
-// const { spawn } = require('child_process');
 const { setFailed } = require('@actions/core');
 const artifact = require('@actions/artifact');
 
